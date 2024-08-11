@@ -7,6 +7,11 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class UserService {
+
+  private PATH = "/graphql";
+  private HOST = "http://localhost:4000";
+  private fullUrl = this.HOST + this.PATH;
+
   constructor(private apollo: Apollo) { }
 
   getUsers(): Observable<any> {
@@ -21,6 +26,9 @@ export class UserService {
             }
           }
         `,
+        context: {
+          uri: this.fullUrl,
+        },
       })
       .valueChanges.pipe(map((result: any) => result.data.users));
   }
@@ -36,6 +44,9 @@ export class UserService {
           }
         }
       `,
+      context: {
+        uri: this.fullUrl,
+      },
       variables: {
         name: name,
         email: email,
